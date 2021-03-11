@@ -2,7 +2,6 @@ package windows;
 
 import base.Dir;
 import base.Group;
-import base.ResourceManager;
 import bean.Bullet;
 import bean.Explosion;
 import bean.Tank;
@@ -12,7 +11,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +34,7 @@ public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
     private Image offScreenImage = null;
+    private int numberOfLives = 5;
     private Tank tank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
     private List<Bullet> bulletList = new ArrayList<>();
     private List<Tank> enemyTankList = new ArrayList<>(8);
@@ -49,6 +48,22 @@ public class TankFrame extends Frame {
 
     public static int getGameHeight() {
         return GAME_HEIGHT;
+    }
+
+    public Tank getTank() {
+        return tank;
+    }
+
+    public void setTank(Tank tank) {
+        this.tank = tank;
+    }
+
+    public int getNumberOfLives() {
+        return numberOfLives;
+    }
+
+    public void setNumberOfLives(int numberOfLives) {
+        this.numberOfLives = numberOfLives;
     }
 
     public List<Bullet> getBulletList() {
@@ -111,14 +126,17 @@ public class TankFrame extends Frame {
         Color color = graphics.getColor();
         graphics.setColor(Color.white);
         graphics.drawString("子弹数量：" + bulletList.size(), 30, 50);
-        graphics.drawString("敌人数量：" + enemyTankList.size(), 30, 80);
+        graphics.drawString("敌人数量：" + enemyTankList.size(), 30, 70);
+        graphics.drawString("剩余生命：" + numberOfLives, 30, 90);
         graphics.drawRect(5, 30, GAME_WIDTH - 15, GAME_HEIGHT - 35);
         graphics.setColor(color);
 
-        tank.print(graphics, false);
+        tank.print(graphics);
 
         for (int i = 0; i < enemyTankList.size(); i++) {
-            enemyTankList.get(i).print(graphics, true);
+            Tank enemyTank = enemyTankList.get(i);
+            enemyTank.print(graphics);
+            enemyTank.collideWith(tank);
         }
 
         for (int i = 0; i < bulletList.size(); i++) {
