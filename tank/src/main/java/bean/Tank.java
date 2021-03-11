@@ -29,7 +29,7 @@ import java.util.Random;
 public class Tank {
     private Integer x;
     private Integer y;
-    private static final Integer SPEED = 1;
+    private static final Integer SPEED = 10;
     private Dir dir = Dir.DOWN;
     private Group group = Group.GOOD;
     private boolean moving = true;
@@ -131,15 +131,27 @@ public class Tank {
         switch (dir) {
             case UP:
                 y -= SPEED;
+                if (y <= 0) {
+                    y = Tank.TANK_HEIGHT + 30;
+                }
                 break;
             case DOWN:
                 y += SPEED;
+                if (y >= TankFrame.getGameHeight()) {
+                    y = TankFrame.getGameHeight() - 30;
+                }
                 break;
             case LEFT:
                 x -= SPEED;
+                if (x <= 0) {
+                    x = Tank.TANK_WIDTH + 5;
+                }
                 break;
             case RIGHT:
                 x += SPEED;
+                if (x >= TankFrame.getGameWidth()) {
+                    x = TankFrame.getGameWidth() - 15;
+                }
                 break;
             default:
                 break;

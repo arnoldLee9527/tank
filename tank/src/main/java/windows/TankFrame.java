@@ -112,6 +112,7 @@ public class TankFrame extends Frame {
         graphics.setColor(Color.white);
         graphics.drawString("子弹数量：" + bulletList.size(), 30, 50);
         graphics.drawString("敌人数量：" + enemyTankList.size(), 30, 80);
+        graphics.drawRect(5, 30, GAME_WIDTH - 15, GAME_HEIGHT - 35);
         graphics.setColor(color);
 
         tank.print(graphics, false);
