@@ -9,7 +9,7 @@ import java.awt.*;
 
 /**
  *
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 爆炸效果类</strong><br>
  * <strong>Create on : 2021/2/26 15:33<br>
  * </strong>
  * <p>

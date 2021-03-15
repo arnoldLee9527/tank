@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.Random;
 
 /**
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 坦克类</strong><br>
  * <strong>Create on : 2021/2/26 14:08<br>
  * </strong>
  * <p>
@@ -31,11 +31,12 @@ public class Tank {
     private Dir dir = Dir.DOWN;
     private Group group = Group.GOOD;
     private boolean moving = false;
+    private int numberOfLives = 5;
     private TankFrame tankFrame;
     public boolean living = true;
-
-    public static final int TANK_WIDTH = ResourceManager.tankD.getWidth();
-    public static final int TANK_HEIGHT = ResourceManager.tankD.getHeight();
+    public static final int TANK_WIDTH = ResourceManager.gTankD.getWidth();
+    public static final int TANK_HEIGHT = ResourceManager.gTankD.getHeight();
+    public Rectangle rectangle = new Rectangle();
 
     private Random random = new Random();
 
@@ -48,6 +49,10 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = TANK_WIDTH;
+        rectangle.height = TANK_HEIGHT;
     }
 
     public Integer getX() {
@@ -90,6 +95,15 @@ public class Tank {
         this.moving = moving;
     }
 
+    public int getNumberOfLives() {
+        return numberOfLives;
+    }
+
+    public void setNumberOfLives(int numberOfLives) {
+        this.numberOfLives = numberOfLives;
+    }
+
+
     public void print(Graphics graphics) {
         if (!living) {
             tankFrame.getEnemyTankList().remove(this);
@@ -101,16 +115,16 @@ public class Tank {
     private void printTank(Graphics graphics, int x, int y) {
         switch (dir) {
             case UP:
-                graphics.drawImage(ResourceManager.tankU, x, y, null);
+                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankU : ResourceManager.bTankU, x, y, null);
                 break;
             case DOWN:
-                graphics.drawImage(ResourceManager.tankD, x, y, null);
+                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankD : ResourceManager.bTankD, x, y, null);
                 break;
             case LEFT:
-                graphics.drawImage(ResourceManager.tankL, x, y, null);
+                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankL : ResourceManager.bTankL, x, y, null);
                 break;
             case RIGHT:
-                graphics.drawImage(ResourceManager.tankR, x, y, null);
+                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankR : ResourceManager.bTankR, x, y, null);
                 break;
             default:
                 break;
@@ -122,72 +136,48 @@ public class Tank {
         switch (dir) {
             case UP:
                 y -= SPEED;
-                if (y <= 0) {
-                    y = Tank.TANK_HEIGHT + 30;
-                    this.changeDirection(dir);
-                }
                 break;
             case DOWN:
                 y += SPEED;
-                if (y >= TankFrame.getGameHeight()) {
-                    y = TankFrame.getGameHeight() - 30;
-                    this.changeDirection(dir);
-                }
                 break;
             case LEFT:
                 x -= SPEED;
-                if (x <= 0) {
-                    x = Tank.TANK_WIDTH + 5;
-                    this.changeDirection(dir);
-                }
                 break;
             case RIGHT:
                 x += SPEED;
-                if (x >= TankFrame.getGameWidth()) {
-                    x = TankFrame.getGameWidth() - 15;
-                    this.changeDirection(dir);
-                }
                 break;
             default:
                 break;
         }
-        if (random.nextInt(10) > 9) {
+        if (Group.BAD == group && random.nextInt(100) > 95) {
             fire();
+        }
+        if (Group.BAD == group && random.nextInt(10) > 8) {
+            this.changeDirection();
+        }
+        boundsCheck();
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+    }
+
+    private void boundsCheck() {
+        if (x < 0) {
+            x = 0;
+        }
+        if (x > TankFrame.getGameWidth() - TANK_WIDTH) {
+            x = TankFrame.getGameWidth() - TANK_WIDTH;
+        }
+        
+        if (y < 30) {
+            y = 30;
+        }
+        if (y > TankFrame.getGameHeight() - TANK_HEIGHT) {
+            y = TankFrame.getGameHeight() - TANK_HEIGHT;
         }
     }
 
-    private void changeDirection(Dir dir) {
-        if (group == Group.BAD){
-            int i = random.nextInt(4);
-            switch (i) {
-                case 0:
-                    //if (dir == Dir.UP) {
-                    //    break;
-                    //}
-                    this.dir = Dir.UP;
-                    break;
-                case 1:
-                    //if (dir == Dir.DOWN) {
-                    //    break;
-                    //}
-                    this.dir = Dir.DOWN;
-                    break;
-                case 2:
-                    //if (dir == Dir.LEFT) {
-                    //    break;
-                    //}
-                    this.dir = Dir.LEFT;
-                    break;
-                case 3:
-                    //if (dir == Dir.RIGHT) {
-                    //    break;
-                    //}
-                    this.dir = Dir.RIGHT;
-                    break;
-                default:
-                    break;
-            }
-        }
+    private void changeDirection() {
+        this.dir = Dir.values()[random.nextInt(4)];
     }
 
 
@@ -203,19 +193,15 @@ public class Tank {
 
     public void collideWith(Tank goodTank) {
         if (this.group == goodTank.getGroup()) return;
-        //TODO 用一个Rectangle
-        Rectangle bR = new Rectangle(this.x, this.y, TANK_WIDTH, TANK_HEIGHT);
-        Rectangle tR = new Rectangle(goodTank.getX(), goodTank.getY(), Tank.TANK_WIDTH, Tank.TANK_HEIGHT);
-        if (bR.intersects(tR)) {
+        //用一个Rectangle
+        if (this.rectangle.intersects(goodTank.rectangle)) {
             goodTank.die();
             this.die();
             TankFrame.getExplosionList().add(new Explosion(goodTank.getX(), goodTank.getY()));
             TankFrame.getExplosionList().add(new Explosion(this.x, this.y));
-            if (goodTank.group == Group.GOOD){
+            if (goodTank.group == Group.GOOD) {
                 tankFrame.setTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, tankFrame));
-                int numberOfLives = tankFrame.getNumberOfLives();
-                numberOfLives -= 0.5;
-                tankFrame.setNumberOfLives(numberOfLives);
+                numberOfLives --;
             }
         }
     }

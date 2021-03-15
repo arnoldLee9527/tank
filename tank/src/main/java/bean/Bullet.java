@@ -9,7 +9,7 @@ import java.awt.*;
 
 /**
  *
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 子弹类</strong><br>
  * <strong>Create on : 2021/2/26 15:33<br>
  * </strong>
  * <p>
@@ -33,6 +33,7 @@ public class Bullet {
     private static final Integer SPEED = 10;
     public static final int BULLET_WIDTH = ResourceManager.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceManager.bulletD.getHeight();
+    private Rectangle rectangle = new Rectangle();
     
     private boolean living = true;
 
@@ -58,6 +59,10 @@ public class Bullet {
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = BULLET_WIDTH;
+        rectangle.height = BULLET_HEIGHT;
     }
 
     public void print(Graphics graphics) {
@@ -107,18 +112,20 @@ public class Bullet {
         if (x < 0 || y < 0 || x > TankFrame.getGameWidth() || y > TankFrame.getGameHeight()){
             living = false;
         }
+        rectangle.x = this.x;
+        rectangle.y = this.y;
     }
 
     public void collideWith(Tank tank) {
         if (this.group == tank.getGroup()) return;
         
-        //TODO 用一个Rectangle
-        Rectangle bR = new Rectangle(this.x, this.y, BULLET_WIDTH, BULLET_HEIGHT);
-        Rectangle tR = new Rectangle(tank.getX(), tank.getY(), Tank.TANK_WIDTH, Tank.TANK_HEIGHT);
-        if (bR.intersects(tR)) {
+        // 用一个Rectangle
+        if (rectangle.intersects(tank.rectangle)) {
             tank.die();
             this.die();
-            tankFrame.getExplosionList().add(new Explosion(tank.getX(), tank.getY()));
+            int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
+            int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
+            TankFrame.getExplosionList().add(new Explosion(eX, eY));
         }
     }
 

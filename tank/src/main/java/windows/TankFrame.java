@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 游戏窗口</strong><br>
  * <strong>Create on : 2021/2/23 17:00<br>
  * </strong>
  * <p>
@@ -34,7 +34,6 @@ public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
     private Image offScreenImage = null;
-    private int numberOfLives = 5;
     private Tank tank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
     private List<Bullet> bulletList = new ArrayList<>();
     private List<Tank> enemyTankList = new ArrayList<>(8);
@@ -56,14 +55,6 @@ public class TankFrame extends Frame {
 
     public void setTank(Tank tank) {
         this.tank = tank;
-    }
-
-    public int getNumberOfLives() {
-        return numberOfLives;
-    }
-
-    public void setNumberOfLives(int numberOfLives) {
-        this.numberOfLives = numberOfLives;
     }
 
     public List<Bullet> getBulletList() {
@@ -127,7 +118,8 @@ public class TankFrame extends Frame {
         graphics.setColor(Color.white);
         graphics.drawString("子弹数量：" + bulletList.size(), 30, 50);
         graphics.drawString("敌人数量：" + enemyTankList.size(), 30, 70);
-        graphics.drawString("剩余生命：" + numberOfLives, 30, 90);
+        graphics.drawString("爆炸数量：" + explosionList.size(), 30, 90);
+        graphics.drawString("剩余生命：" + tank.getNumberOfLives(), 30, 110);
         graphics.drawRect(5, 30, GAME_WIDTH - 15, GAME_HEIGHT - 35);
         graphics.setColor(color);
 

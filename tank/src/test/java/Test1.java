@@ -1,5 +1,6 @@
 import base.Dir;
 import base.Group;
+import base.PropertiesManager;
 import bean.Tank;
 import org.junit.jupiter.api.Test;
 import windows.TankFrame;
@@ -8,13 +9,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 测试</strong><br>
  * <strong>Create on : 2021/2/23 17:08<br>
  * </strong>
  * <p>
@@ -34,8 +32,8 @@ public class Test1 {
     public static void main(String[] args) throws InterruptedException {
         
         TankFrame tankFrame = new TankFrame();
-
-        for (int i = 0; i < 3 ; i++) {
+        int initBadTankCount = Integer.parseInt((String)PropertiesManager.getProperty("initBadTankCount"));
+        for (int i = 0; i < initBadTankCount ; i++) {
             Tank tank = new Tank(50 * i, 300, Dir.UP, Group.BAD, tankFrame);
             tankFrame.getEnemyTankList().add(tank);
         }

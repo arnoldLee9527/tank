@@ -1,5 +1,7 @@
 package base;
 
+import utils.ImageUtil;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * <strong>Description : TODO</strong><br>
+ * <strong>Description : 图片资源管理类</strong><br>
  * <strong>Create on : 2021/3/8 20:17<br>
  * </strong>
  * <p>
@@ -25,22 +27,27 @@ import java.util.List;
  */ 
 public class ResourceManager {
     
-    public static BufferedImage tankU, tankD, tankL, tankR,
+    public static BufferedImage gTankU, gTankD, gTankL, gTankR, bTankU, bTankD, bTankL, bTankR,
     bulletU, bulletD, bulletL, bulletR;
 
     public static BufferedImage[] explosionList = new BufferedImage[16];
     
     static {
         try {
-            tankU = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/tankU.gif"));
-            tankD = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/tankD.gif"));
-            tankL = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/tankL.gif"));
-            tankR = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/tankR.gif"));
+            gTankU = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/GoodTank1.png"));
+            gTankD = ImageUtil.rotateImage(gTankU, 180);
+            gTankL = ImageUtil.rotateImage(gTankU, 270);
+            gTankR = ImageUtil.rotateImage(gTankU, 90);
+            
+            bTankU = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/BadTank1.png"));
+            bTankD = ImageUtil.rotateImage(bTankU, 180);
+            bTankL = ImageUtil.rotateImage(bTankU, 270);
+            bTankR = ImageUtil.rotateImage(bTankU, 90);
 
-            bulletU = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/bulletU.gif"));
-            bulletD = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/bulletD.gif"));
-            bulletL = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/bulletL.gif"));
-            bulletR = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/bulletR.gif"));
+            bulletU = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/bulletU.png"));
+            bulletD = ImageUtil.rotateImage(bulletU, 180);
+            bulletL = ImageUtil.rotateImage(bulletU, 270);
+            bulletR = ImageUtil.rotateImage(bulletU, 90);
             
             for (int i = 0; i < 16; i++){
                 explosionList[i] = (ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/e" + (i+1) + ".gif")));
