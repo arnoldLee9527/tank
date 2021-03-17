@@ -32,7 +32,8 @@ public class Test1 {
     public static void main(String[] args) throws InterruptedException {
         
         TankFrame tankFrame = new TankFrame();
-        int initBadTankCount = Integer.parseInt((String)PropertiesManager.getProperty("initBadTankCount"));
+        PropertiesManager propertiesManager = PropertiesManager.getInstance();
+        int initBadTankCount = Integer.parseInt((String)propertiesManager.getProperty("initBadTankCount"));
         for (int i = 0; i < initBadTankCount ; i++) {
             Tank tank = new Tank(50 * i, 300, Dir.UP, Group.BAD, tankFrame);
             tankFrame.getEnemyTankList().add(tank);

@@ -20,9 +20,20 @@ import java.util.Properties;
  * @email arnoldlee9527@163.com<br>
  */
 public class PropertiesManager {
-    static Properties properties = new Properties();
 
-    static {
+    private PropertiesManager() {
+        
+    }
+
+    private static final PropertiesManager INSTANCE = new PropertiesManager();
+
+    public static PropertiesManager getInstance(){
+        return INSTANCE;
+    }
+    
+    private Properties properties = new Properties();
+    
+    {
         try {
             properties.load(PropertiesManager.class.getClassLoader().getResourceAsStream("systemConfig.properties"));
         } catch (IOException e) {
@@ -30,7 +41,7 @@ public class PropertiesManager {
         }
     }
 
-    public static Object getProperty(String key) {
+    public Object getProperty(String key) {
         if (properties == null) return null;
         
         return properties.getProperty(key);

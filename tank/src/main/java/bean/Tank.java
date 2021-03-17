@@ -2,10 +2,14 @@ package bean;
 
 import base.Dir;
 import base.Group;
+import base.PropertiesManager;
 import base.ResourceManager;
+import interfaces.FireStrategy;
+import interfaces.interfaceImpl.DefaultFireStrategy;
 import windows.TankFrame;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 /**
@@ -37,6 +41,8 @@ public class Tank {
     public static final int TANK_WIDTH = ResourceManager.gTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceManager.gTankD.getHeight();
     public Rectangle rectangle = new Rectangle();
+    private FireStrategy fs = new DefaultFireStrategy();
+    private PropertiesManager property = PropertiesManager.getInstance();
 
     private Random random = new Random();
 
@@ -53,6 +59,21 @@ public class Tank {
         rectangle.y = this.y;
         rectangle.width = TANK_WIDTH;
         rectangle.height = TANK_HEIGHT;
+        if (this.getGroup() == Group.GOOD) {
+            String goodFSName = (String) property.getProperty("goodFS");
+            getFireStrategyByProperties(goodFSName);
+        }else {
+            String badFS = (String) property.getProperty("badFS");
+            getFireStrategyByProperties(badFS);
+        }
+    }
+
+    private void getFireStrategyByProperties(String fs) {
+        try {
+            this.fs = (FireStrategy) Class.forName(fs).getDeclaredConstructor().newInstance();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     public Integer getX() {
@@ -103,6 +124,13 @@ public class Tank {
         this.numberOfLives = numberOfLives;
     }
 
+    public TankFrame getTankFrame() {
+        return tankFrame;
+    }
+
+    public void setTankFrame(TankFrame tankFrame) {
+        this.tankFrame = tankFrame;
+    }
 
     public void print(Graphics graphics) {
         if (!living) {
@@ -182,9 +210,8 @@ public class Tank {
 
 
     public void fire() {
-        int bX = this.x + Tank.TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
-        int bY = this.y + Tank.TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
-        tankFrame.getBulletList().add(new Bullet(bX, bY, this.dir, this.group, this.tankFrame));
+       //defaultFS.fire(this);
+        fs.fire(this);
     }
 
     public void die() {

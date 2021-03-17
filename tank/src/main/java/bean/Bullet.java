@@ -63,6 +63,7 @@ public class Bullet {
         rectangle.y = this.y;
         rectangle.width = BULLET_WIDTH;
         rectangle.height = BULLET_HEIGHT;
+        tankFrame.getBulletList().add(this);
     }
 
     public void print(Graphics graphics) {
