@@ -1,5 +1,6 @@
 package interfaces.interfaceImpl;
 
+import abstractFactory.BaseTank;
 import bean.Bullet;
 import bean.Tank;
 import interfaces.FireStrategy;
@@ -32,7 +33,7 @@ public class DefaultFireStrategy implements FireStrategy {
     //}
     //
     @Override
-    public void fire(Tank tank) {
+    public void fire(BaseTank tank) {
         int bX = tank.getX() + Tank.TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
         int bY = tank.getY() + Tank.TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
         new Bullet(bX, bY, tank.getDir(), tank.getGroup(), tank.getTankFrame());

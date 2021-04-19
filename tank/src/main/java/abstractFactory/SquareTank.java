@@ -1,10 +1,10 @@
-package bean;
+package abstractFactory;
 
-import abstractFactory.BaseTank;
 import base.Dir;
 import base.Group;
 import base.PropertiesManager;
 import base.ResourceManager;
+import bean.Explosion;
 import interfaces.FireStrategy;
 import interfaces.interfaceImpl.DefaultFireStrategy;
 import windows.TankFrame;
@@ -29,7 +29,7 @@ import java.util.Random;
  * <br>
  * @email arnoldlee9527@163.com<br>
  */
-public class Tank extends BaseTank{
+public class SquareTank extends BaseTank{
     private Integer x;
     private Integer y;
     private static final Integer SPEED = 5;
@@ -47,10 +47,10 @@ public class Tank extends BaseTank{
 
     private Random random = new Random();
 
-    public Tank() {
+    public SquareTank() {
     }
 
-    public Tank(Integer x, Integer y, Dir dir, Group group, TankFrame tankFrame) {
+    public SquareTank(Integer x, Integer y, Dir dir, Group group, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -142,22 +142,10 @@ public class Tank extends BaseTank{
     }
 
     private void printTank(Graphics graphics, int x, int y) {
-        switch (dir) {
-            case UP:
-                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankU : ResourceManager.bTankU, x, y, null);
-                break;
-            case DOWN:
-                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankD : ResourceManager.bTankD, x, y, null);
-                break;
-            case LEFT:
-                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankL : ResourceManager.bTankL, x, y, null);
-                break;
-            case RIGHT:
-                graphics.drawImage(Group.GOOD == group ? ResourceManager.gTankR : ResourceManager.bTankR, x, y, null);
-                break;
-            default:
-                break;
-        }
+        Color color = graphics.getColor();
+        graphics.setColor(Color.RED);
+        graphics.drawRect(x, y, 30, 30);
+        graphics.setColor(color);
     }
 
     private void tankMove() {
@@ -228,7 +216,7 @@ public class Tank extends BaseTank{
             TankFrame.getExplosionList().add(new Explosion(goodTank.getX(), goodTank.getY()));
             TankFrame.getExplosionList().add(new Explosion(this.x, this.y));
             if (goodTank.getGroup() == Group.GOOD) {
-                tankFrame.setTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, tankFrame));
+                tankFrame.setTank(new SquareTank(100, 100, Dir.DOWN, Group.GOOD, tankFrame));
                 numberOfLives --;
             }
         }

@@ -1,5 +1,6 @@
 package bean;
 
+import abstractFactory.BaseExplosion;
 import base.Dir;
 import base.Group;
 import base.ResourceManager;
@@ -24,7 +25,7 @@ import java.awt.*;
  *          <br>
  *          <br>
  */ 
-public class Explosion {
+public class Explosion extends BaseExplosion {
     private Integer x;
     private Integer y;
     private Integer step = 0;
@@ -54,6 +55,7 @@ public class Explosion {
         this.y = y;
     }
 
+    @Override
     public void print(Graphics graphics) {
         graphics.drawImage(ResourceManager.explosionList[step++], x, y, EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
         if (step >= ResourceManager.explosionList.length) {

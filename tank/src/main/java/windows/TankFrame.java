@@ -1,5 +1,8 @@
 package windows;
 
+import abstractFactory.BaseExplosion;
+import abstractFactory.BaseTank;
+import abstractFactory.DefaultFactory;
 import base.Dir;
 import base.Group;
 import bean.Bullet;
@@ -34,11 +37,12 @@ public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
     private Image offScreenImage = null;
-    private Tank tank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
+    private BaseTank tank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
     private List<Bullet> bulletList = new ArrayList<>();
-    private List<Tank> enemyTankList = new ArrayList<>(8);
-    private static List<Explosion> explosionList = new ArrayList<>();
-
+    private List<BaseTank> enemyTankList = new ArrayList<>(8);
+    private static List<BaseExplosion> explosionList = new ArrayList<>();
+    
+    public DefaultFactory defaultFactory = new DefaultFactory();
 
 
     public static int getGameWidth() {
@@ -49,11 +53,11 @@ public class TankFrame extends Frame {
         return GAME_HEIGHT;
     }
 
-    public Tank getTank() {
+    public BaseTank getTank() {
         return tank;
     }
 
-    public void setTank(Tank tank) {
+    public void setTank(BaseTank tank) {
         this.tank = tank;
     }
 
@@ -65,19 +69,19 @@ public class TankFrame extends Frame {
         this.bulletList = bulletList;
     }
 
-    public List<Tank> getEnemyTankList() {
+    public List<BaseTank> getEnemyTankList() {
         return enemyTankList;
     }
 
-    public void setEnemyTankList(List<Tank> enemyTankList) {
+    public void setEnemyTankList(List<BaseTank> enemyTankList) {
         this.enemyTankList = enemyTankList;
     }
 
-    public static List<Explosion> getExplosionList() {
+    public static List<BaseExplosion> getExplosionList() {
         return explosionList;
     }
 
-    public static void setExplosionList(List<Explosion> explosionList) {
+    public static void setExplosionList(List<BaseExplosion> explosionList) {
         TankFrame.explosionList = explosionList;
     }
 
@@ -126,7 +130,7 @@ public class TankFrame extends Frame {
         tank.print(graphics);
 
         for (int i = 0; i < enemyTankList.size(); i++) {
-            Tank enemyTank = enemyTankList.get(i);
+            BaseTank enemyTank = enemyTankList.get(i);
             enemyTank.print(graphics);
             enemyTank.collideWith(tank);
         }
@@ -139,7 +143,7 @@ public class TankFrame extends Frame {
         for (int i = 0; i < bulletList.size(); i++) {
             Bullet bullet = bulletList.get(i);
             for (int j = 0; j < enemyTankList.size(); j++) {
-                Tank tank = enemyTankList.get(j);
+                BaseTank tank = enemyTankList.get(j);
                 bullet.collideWith(tank);
                 //if (result){
                 //    explosion.print(graphics);

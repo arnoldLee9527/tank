@@ -1,5 +1,6 @@
 package interfaces.interfaceImpl;
 
+import abstractFactory.BaseTank;
 import base.Dir;
 import base.Group;
 import bean.Bullet;
@@ -34,7 +35,7 @@ public class SuperFireStrategy implements FireStrategy {
     //}
     
     @Override
-    public void fire(Tank tank) {
+    public void fire(BaseTank tank) {
         int bX = tank.getX() + Tank.TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
         int bY = tank.getY() + Tank.TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
         for (Dir dir : Dir.values()) {

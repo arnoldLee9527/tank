@@ -1,12 +1,11 @@
-package interfaces;
+package abstractFactory;
 
-import abstractFactory.BaseTank;
-import bean.Tank;
+import java.awt.*;
 
 /**
  *
- * <strong>Description : 开火策略</strong><br>
- * <strong>Create on : 2021/3/17 10:34<br>
+ * <strong>Description : TODO</strong><br>
+ * <strong>Create on : 2021/3/31 14:13<br>
  * </strong>
  * <p>
  * 
@@ -20,6 +19,6 @@ import bean.Tank;
  *          <br>
  *          <br>
  */ 
-public interface FireStrategy {
-    void fire(BaseTank tank);
+public abstract class BaseBullet {
+    public abstract void print(Graphics graphics);
 }

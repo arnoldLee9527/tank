@@ -1,5 +1,7 @@
 package bean;
 
+import abstractFactory.BaseBullet;
+import abstractFactory.BaseTank;
 import base.Dir;
 import base.Group;
 import base.ResourceManager;
@@ -24,7 +26,7 @@ import java.awt.*;
  *          <br>
  *          <br>
  */ 
-public class Bullet {
+public class Bullet extends BaseBullet {
     private Integer x;
     private Integer y;
     private Dir dir;
@@ -66,6 +68,7 @@ public class Bullet {
         tankFrame.getBulletList().add(this);
     }
 
+    @Override
     public void print(Graphics graphics) {
         if (!living) {
             tankFrame.getBulletList().remove(this);
@@ -117,16 +120,15 @@ public class Bullet {
         rectangle.y = this.y;
     }
 
-    public void collideWith(Tank tank) {
+    public void collideWith(BaseTank tank) {
         if (this.group == tank.getGroup()) return;
-        
         // 用一个Rectangle
         if (rectangle.intersects(tank.rectangle)) {
             tank.die();
             this.die();
             int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
             int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
-            TankFrame.getExplosionList().add(new Explosion(eX, eY));
+            TankFrame.getExplosionList().add(tankFrame.defaultFactory.createExplosions(eX, eY, tankFrame));
         }
     }
 

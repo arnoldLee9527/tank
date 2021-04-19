@@ -1,3 +1,4 @@
+import abstractFactory.SquareTank;
 import base.Dir;
 import base.Group;
 import base.PropertiesManager;
@@ -35,7 +36,7 @@ public class Test1 {
         PropertiesManager propertiesManager = PropertiesManager.getInstance();
         int initBadTankCount = Integer.parseInt((String)propertiesManager.getProperty("initBadTankCount"));
         for (int i = 0; i < initBadTankCount ; i++) {
-            Tank tank = new Tank(50 * i, 300, Dir.UP, Group.BAD, tankFrame);
+            SquareTank tank = new SquareTank(50 * i, 300, Dir.UP, Group.BAD, tankFrame);
             tankFrame.getEnemyTankList().add(tank);
         }
         
