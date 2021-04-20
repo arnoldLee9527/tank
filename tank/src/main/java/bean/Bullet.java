@@ -3,6 +3,7 @@ package bean;
 import base.Dir;
 import base.Group;
 import base.ResourceManager;
+import modle.GameModel;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -29,7 +30,7 @@ public class Bullet {
     private Integer y;
     private Dir dir;
     private Group group = Group.GOOD;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
     private static final Integer SPEED = 10;
     public static final int BULLET_WIDTH = ResourceManager.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceManager.bulletD.getHeight();
@@ -53,22 +54,22 @@ public class Bullet {
         this.y = y;
     }
 
-    public Bullet(Integer x, Integer y, Dir dir, Group group, TankFrame tankFrame) {
+    public Bullet(Integer x, Integer y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
+        this.gameModel = gameModel;
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = BULLET_WIDTH;
         rectangle.height = BULLET_HEIGHT;
-        tankFrame.getBulletList().add(this);
+        gameModel.getBulletList().add(this);
     }
 
     public void print(Graphics graphics) {
         if (!living) {
-            tankFrame.getBulletList().remove(this);
+            gameModel.getBulletList().remove(this);
         }
         //Color color = graphics.getColor();
         //graphics.setColor(Color.RED);
@@ -126,7 +127,7 @@ public class Bullet {
             this.die();
             int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
             int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
-            TankFrame.getExplosionList().add(new Explosion(eX, eY));
+            GameModel.getExplosionList().add(new Explosion(eX, eY));
         }
     }
 

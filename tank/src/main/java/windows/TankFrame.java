@@ -1,18 +1,14 @@
 package windows;
 
 import base.Dir;
-import base.Group;
-import bean.Bullet;
-import bean.Explosion;
 import bean.Tank;
+import modle.GameModel;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <strong>Description : 游戏窗口</strong><br>
@@ -31,15 +27,12 @@ import java.util.List;
  * @email arnoldlee9527@163.com<br>
  */
 public class TankFrame extends Frame {
+    
+    private GameModel gameModel = new GameModel();
+    
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
     private Image offScreenImage = null;
-    private Tank tank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
-    private List<Bullet> bulletList = new ArrayList<>();
-    private List<Tank> enemyTankList = new ArrayList<>(8);
-    private static List<Explosion> explosionList = new ArrayList<>();
-
-
 
     public static int getGameWidth() {
         return GAME_WIDTH;
@@ -47,38 +40,6 @@ public class TankFrame extends Frame {
 
     public static int getGameHeight() {
         return GAME_HEIGHT;
-    }
-
-    public Tank getTank() {
-        return tank;
-    }
-
-    public void setTank(Tank tank) {
-        this.tank = tank;
-    }
-
-    public List<Bullet> getBulletList() {
-        return bulletList;
-    }
-
-    public void setBulletList(List<Bullet> bulletList) {
-        this.bulletList = bulletList;
-    }
-
-    public List<Tank> getEnemyTankList() {
-        return enemyTankList;
-    }
-
-    public void setEnemyTankList(List<Tank> enemyTankList) {
-        this.enemyTankList = enemyTankList;
-    }
-
-    public static List<Explosion> getExplosionList() {
-        return explosionList;
-    }
-
-    public static void setExplosionList(List<Explosion> explosionList) {
-        TankFrame.explosionList = explosionList;
     }
 
     public TankFrame() {
@@ -114,42 +75,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics graphics) {
-        Color color = graphics.getColor();
-        graphics.setColor(Color.white);
-        graphics.drawString("子弹数量：" + bulletList.size(), 30, 50);
-        graphics.drawString("敌人数量：" + enemyTankList.size(), 30, 70);
-        graphics.drawString("爆炸数量：" + explosionList.size(), 30, 90);
-        graphics.drawString("剩余生命：" + tank.getNumberOfLives(), 30, 110);
-        graphics.drawRect(5, 30, GAME_WIDTH - 15, GAME_HEIGHT - 35);
-        graphics.setColor(color);
-
-        tank.print(graphics);
-
-        for (int i = 0; i < enemyTankList.size(); i++) {
-            Tank enemyTank = enemyTankList.get(i);
-            enemyTank.print(graphics);
-            enemyTank.collideWith(tank);
-        }
-
-        for (int i = 0; i < bulletList.size(); i++) {
-            Bullet bullet = bulletList.get(i);
-            bullet.print(graphics);
-        }
-
-        for (int i = 0; i < bulletList.size(); i++) {
-            Bullet bullet = bulletList.get(i);
-            for (int j = 0; j < enemyTankList.size(); j++) {
-                Tank tank = enemyTankList.get(j);
-                bullet.collideWith(tank);
-                //if (result){
-                //    explosion.print(graphics);
-                //}
-            }
-        }
-
-        for (int i = 0; i < explosionList.size(); i++) {
-            explosionList.get(i).print(graphics);
-        }
+        gameModel.print(graphics);
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -197,7 +123,7 @@ public class TankFrame extends Frame {
                     right = false;
                     break;
                 case KeyEvent.VK_SPACE:
-                    tank.fire();
+                    gameModel.getMyTank().fire();
                     break;
                 default:
                     break;
@@ -206,6 +132,7 @@ public class TankFrame extends Frame {
         }
 
         private void tankMove() {
+            Tank tank = gameModel.getMyTank();
             if (!up && !down && !left && !right) {
                 tank.setMoving(false);
             } else {

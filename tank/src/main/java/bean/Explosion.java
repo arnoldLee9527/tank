@@ -3,6 +3,7 @@ package bean;
 import base.Dir;
 import base.Group;
 import base.ResourceManager;
+import modle.GameModel;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -57,7 +58,7 @@ public class Explosion {
     public void print(Graphics graphics) {
         graphics.drawImage(ResourceManager.explosionList[step++], x, y, EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
         if (step >= ResourceManager.explosionList.length) {
-            TankFrame.getExplosionList().remove(this);
+            GameModel.getExplosionList().remove(this);
         }
     }
 

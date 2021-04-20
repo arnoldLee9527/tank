@@ -6,6 +6,7 @@ import base.PropertiesManager;
 import base.ResourceManager;
 import interfaces.FireStrategy;
 import interfaces.interfaceImpl.DefaultFireStrategy;
+import modle.GameModel;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -36,7 +37,7 @@ public class Tank {
     private Group group = Group.GOOD;
     private boolean moving = false;
     private int numberOfLives = 5;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
     public boolean living = true;
     public static final int TANK_WIDTH = ResourceManager.gTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceManager.gTankD.getHeight();
@@ -49,12 +50,12 @@ public class Tank {
     public Tank() {
     }
 
-    public Tank(Integer x, Integer y, Dir dir, Group group, TankFrame tankFrame) {
+    public Tank(Integer x, Integer y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
+        this.gameModel = gameModel;
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = TANK_WIDTH;
@@ -124,17 +125,17 @@ public class Tank {
         this.numberOfLives = numberOfLives;
     }
 
-    public TankFrame getTankFrame() {
-        return tankFrame;
+    public GameModel getGameModel() {
+        return gameModel;
     }
 
-    public void setTankFrame(TankFrame tankFrame) {
-        this.tankFrame = tankFrame;
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
     }
 
     public void print(Graphics graphics) {
         if (!living) {
-            tankFrame.getEnemyTankList().remove(this);
+            gameModel.getEnemyTankList().remove(this);
         }
         printTank(graphics, x, y);
         tankMove();
@@ -224,10 +225,10 @@ public class Tank {
         if (this.rectangle.intersects(goodTank.rectangle)) {
             goodTank.die();
             this.die();
-            TankFrame.getExplosionList().add(new Explosion(goodTank.getX(), goodTank.getY()));
-            TankFrame.getExplosionList().add(new Explosion(this.x, this.y));
+            GameModel.getExplosionList().add(new Explosion(goodTank.getX(), goodTank.getY()));
+            GameModel.getExplosionList().add(new Explosion(this.x, this.y));
             if (goodTank.group == Group.GOOD) {
-                tankFrame.setTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, tankFrame));
+                gameModel.setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, gameModel));
                 numberOfLives --;
             }
         }
