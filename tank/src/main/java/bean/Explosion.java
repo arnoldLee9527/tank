@@ -4,6 +4,7 @@ import base.Dir;
 import base.Group;
 import base.ResourceManager;
 import modle.GameModel;
+import modle.GameObject;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -25,12 +26,14 @@ import java.awt.*;
  *          <br>
  *          <br>
  */ 
-public class Explosion {
+public class Explosion extends GameObject {
     private Integer x;
     private Integer y;
     private Integer step = 0;
     public static final int EXPLOSION_WIDTH = ResourceManager.explosionList[0].getWidth();
     public static final int EXPLOSION_HEIGHT = ResourceManager.explosionList[0].getHeight();
+
+    private GameModel gameModel;
     
     private boolean living = true;
 
@@ -50,15 +53,16 @@ public class Explosion {
         this.y = y;
     }
 
-    public Explosion(Integer x, Integer y) {
+    public Explosion(Integer x, Integer y, GameModel gameModel) {
         this.x = x;
         this.y = y;
+        this.gameModel = gameModel;
     }
 
     public void print(Graphics graphics) {
         graphics.drawImage(ResourceManager.explosionList[step++], x, y, EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
         if (step >= ResourceManager.explosionList.length) {
-            GameModel.getExplosionList().remove(this);
+            gameModel.remove(this);
         }
     }
 

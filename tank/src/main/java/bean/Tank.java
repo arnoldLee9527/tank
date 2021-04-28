@@ -7,6 +7,7 @@ import base.ResourceManager;
 import interfaces.FireStrategy;
 import interfaces.interfaceImpl.DefaultFireStrategy;
 import modle.GameModel;
+import modle.GameObject;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -29,7 +30,7 @@ import java.util.Random;
  * <br>
  * @email arnoldlee9527@163.com<br>
  */
-public class Tank {
+public class Tank extends GameObject {
     private Integer x;
     private Integer y;
     private static final Integer SPEED = 5;
@@ -135,7 +136,7 @@ public class Tank {
 
     public void print(Graphics graphics) {
         if (!living) {
-            gameModel.getEnemyTankList().remove(this);
+            gameModel.remove(this);
         }
         printTank(graphics, x, y);
         tankMove();
@@ -225,8 +226,8 @@ public class Tank {
         if (this.rectangle.intersects(goodTank.rectangle)) {
             goodTank.die();
             this.die();
-            GameModel.getExplosionList().add(new Explosion(goodTank.getX(), goodTank.getY()));
-            GameModel.getExplosionList().add(new Explosion(this.x, this.y));
+            gameModel.add(new Explosion(goodTank.getX(), goodTank.getY(), gameModel));
+            gameModel.add(new Explosion(this.x, this.y, gameModel));
             if (goodTank.group == Group.GOOD) {
                 gameModel.setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, gameModel));
                 numberOfLives --;

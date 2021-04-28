@@ -4,6 +4,7 @@ import base.Dir;
 import base.Group;
 import base.ResourceManager;
 import modle.GameModel;
+import modle.GameObject;
 import windows.TankFrame;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ import java.awt.*;
  *          <br>
  *          <br>
  */ 
-public class Bullet {
+public class Bullet extends GameObject {
     private Integer x;
     private Integer y;
     private Dir dir;
@@ -64,12 +65,12 @@ public class Bullet {
         rectangle.y = this.y;
         rectangle.width = BULLET_WIDTH;
         rectangle.height = BULLET_HEIGHT;
-        gameModel.getBulletList().add(this);
+        gameModel.add(this);
     }
 
     public void print(Graphics graphics) {
         if (!living) {
-            gameModel.getBulletList().remove(this);
+            gameModel.remove(this);
         }
         //Color color = graphics.getColor();
         //graphics.setColor(Color.RED);
@@ -127,7 +128,7 @@ public class Bullet {
             this.die();
             int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
             int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
-            GameModel.getExplosionList().add(new Explosion(eX, eY));
+            gameModel.add(new Explosion(eX, eY, gameModel));
         }
     }
 
