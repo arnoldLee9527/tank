@@ -3,11 +3,10 @@ package modle;
 import base.Dir;
 import base.Group;
 import base.PropertiesManager;
-import bean.Bullet;
-import bean.Explosion;
 import bean.Tank;
 import interfaces.Collider;
 import interfaces.interfaceImpl.TankAndBulletCollide;
+import interfaces.interfaceImpl.TankAndTankCollide;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -36,13 +35,15 @@ public class GameModel {
     
     private List<GameObject> gameObjects = new ArrayList<>();
 
-    private Collider collider = new TankAndBulletCollide();
+    private Collider tankAndBulletCollide = new TankAndBulletCollide();
+    private Collider tankAndTankCollide = new TankAndTankCollide();
 
     public GameModel() {
+        gameObjects.add(myTank);
         PropertiesManager propertiesManager = PropertiesManager.getInstance();
         int initBadTankCount = Integer.parseInt((String) propertiesManager.getProperty("initBadTankCount"));
         for (int i = 0; i < initBadTankCount ; i++) {
-            Tank tank = new Tank(50 * i, 300, Dir.UP, Group.BAD, this);
+            Tank tank = new Tank(70 * i, 300, Dir.UP, Group.BAD, this);
             gameObjects.add(tank);
         }
     }
@@ -81,7 +82,7 @@ public class GameModel {
         //graphics.drawRect(5, 30, GAME_WIDTH - 15, GAME_HEIGHT - 35);
         graphics.setColor(color);
 
-        myTank.print(graphics);
+        //myTank.print(graphics);
 
         //for (int i = 0; i < enemyTankList.size(); i++) {
         //    Tank enemyTank = enemyTankList.get(i);
@@ -97,7 +98,8 @@ public class GameModel {
             for (int j = i + 1; j < gameObjects.size(); j++) {
                 GameObject g1 = gameObjects.get(i);
                 GameObject g2 = gameObjects.get(j);
-                collider.collideWith(g1, g2);
+                tankAndBulletCollide.collideWith(g1, g2);
+                tankAndTankCollide.collideWith(g1, g2);
                 //if (result){
                 //    explosion.print(graphics);
                 //}

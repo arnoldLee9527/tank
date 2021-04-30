@@ -32,7 +32,9 @@ import java.util.Random;
  */
 public class Tank extends GameObject {
     private Integer x;
-    private Integer y;
+    private Integer y; 
+    private Integer oldX;
+    private Integer oldY;
     private static final Integer SPEED = 5;
     private Dir dir = Dir.DOWN;
     private Group group = Group.GOOD;
@@ -54,6 +56,8 @@ public class Tank extends GameObject {
     public Tank(Integer x, Integer y, Dir dir, Group group, GameModel gameModel) {
         this.x = x;
         this.y = y;
+        this.oldX = x;
+        this.oldY = y;
         this.dir = dir;
         this.group = group;
         this.gameModel = gameModel;
@@ -162,6 +166,10 @@ public class Tank extends GameObject {
     }
 
     private void tankMove() {
+        if (this.x.equals(this.oldX) | this.y.equals(this.oldY)) {
+            this.oldX = this.x;
+            this.oldY = this.y;
+        }
         if (!moving && Group.GOOD == group) return;
         switch (dir) {
             case UP:
@@ -220,15 +228,18 @@ public class Tank extends GameObject {
         this.living = false;
     }
 
-    public void collideWith(Tank goodTank) {
-        if (this.group == goodTank.getGroup()) return;
-        //用一个Rectangle
-        if (this.rectangle.intersects(goodTank.rectangle)) {
-            goodTank.die();
+    public void collideWith(Tank tank) {
+        if (this.group == tank.getGroup()) {
+        //    相同坦克相撞退回上一步
+            this.x = this.oldX;
+            this.y = this.oldY;
+        }
+        if (this.group != tank.getGroup() && this.rectangle.intersects(tank.rectangle)) {
+            tank.die();
             this.die();
-            gameModel.add(new Explosion(goodTank.getX(), goodTank.getY(), gameModel));
+            gameModel.add(new Explosion(tank.getX(), tank.getY(), gameModel));
             gameModel.add(new Explosion(this.x, this.y, gameModel));
-            if (goodTank.group == Group.GOOD) {
+            if (tank.group == Group.GOOD || this.group == Group.GOOD) {
                 gameModel.setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, gameModel));
                 numberOfLives --;
             }
