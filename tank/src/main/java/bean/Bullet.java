@@ -119,8 +119,8 @@ public class Bullet extends GameObject {
         rectangle.y = this.y;
     }
 
-    public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
+    public boolean collideWith(Tank tank) {
+        if (this.group == tank.getGroup()) return true;
         
         // 用一个Rectangle
         if (rectangle.intersects(tank.rectangle)) {
@@ -129,7 +129,9 @@ public class Bullet extends GameObject {
             int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
             int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
             gameModel.add(new Explosion(eX, eY, gameModel));
+            return false;
         }
+        return true;
     }
 
     private void die() {

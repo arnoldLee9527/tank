@@ -4,9 +4,7 @@ import base.Dir;
 import base.Group;
 import base.PropertiesManager;
 import bean.Tank;
-import interfaces.Collider;
-import interfaces.interfaceImpl.TankAndBulletCollide;
-import interfaces.interfaceImpl.TankAndTankCollide;
+import interfaces.interfaceImpl.ColliderChain;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,9 +33,8 @@ public class GameModel {
     
     private List<GameObject> gameObjects = new ArrayList<>();
 
-    private Collider tankAndBulletCollide = new TankAndBulletCollide();
-    private Collider tankAndTankCollide = new TankAndTankCollide();
-
+    private ColliderChain colliderChain = new ColliderChain();
+    
     public GameModel() {
         gameObjects.add(myTank);
         PropertiesManager propertiesManager = PropertiesManager.getInstance();
@@ -98,8 +95,7 @@ public class GameModel {
             for (int j = i + 1; j < gameObjects.size(); j++) {
                 GameObject g1 = gameObjects.get(i);
                 GameObject g2 = gameObjects.get(j);
-                tankAndBulletCollide.collideWith(g1, g2);
-                tankAndTankCollide.collideWith(g1, g2);
+                colliderChain.collideWith(g1, g2);
                 //if (result){
                 //    explosion.print(graphics);
                 //}

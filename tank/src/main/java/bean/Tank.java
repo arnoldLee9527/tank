@@ -228,7 +228,7 @@ public class Tank extends GameObject {
         this.living = false;
     }
 
-    public void collideWith(Tank tank) {
+    public boolean collideWith(Tank tank) {
         if (this.group == tank.getGroup()) {
         //    相同坦克相撞退回上一步
             this.x = this.oldX;
@@ -243,6 +243,8 @@ public class Tank extends GameObject {
                 gameModel.setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, gameModel));
                 numberOfLives --;
             }
+            return false;
         }
+        return true;
     }
 }

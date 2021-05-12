@@ -20,7 +20,7 @@ import modle.GameObject;
  *          <br>
  */ 
 public interface Collider {
-    
-    void collideWith(GameObject o1, GameObject o2);
+
+    boolean collideWith(GameObject o1, GameObject o2);
     
 }

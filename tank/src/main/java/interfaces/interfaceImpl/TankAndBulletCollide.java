@@ -25,11 +25,12 @@ import modle.GameObject;
 public class TankAndBulletCollide implements Collider {
     
     @Override
-    public void collideWith(GameObject o1, GameObject o2) {
+    public boolean collideWith(GameObject o1, GameObject o2) {
         if (o1 instanceof Tank && o2 instanceof Bullet) {
-            ((Bullet) o2).collideWith((Tank) o1);
+            return ((Bullet) o2).collideWith((Tank) o1);
         }else if (o2 instanceof Tank && o1 instanceof Bullet) {
             this.collideWith(o2, o1);
         }
+        return true;
     }
 }
