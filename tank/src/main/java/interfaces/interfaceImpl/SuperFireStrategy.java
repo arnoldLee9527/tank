@@ -38,7 +38,7 @@ public class SuperFireStrategy implements FireStrategy {
         int bX = tank.getX() + Tank.TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
         int bY = tank.getY() + Tank.TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
         for (Dir dir : Dir.values()) {
-            new Bullet(bX, bY, dir, tank.getGroup(), tank.getGameModel());
+            new Bullet(bX, bY, dir, tank.getGroup());
         }
     }
 }

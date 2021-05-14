@@ -31,11 +31,10 @@ public class Bullet extends GameObject {
     private Integer y;
     private Dir dir;
     private Group group = Group.GOOD;
-    private GameModel gameModel;
     private static final Integer SPEED = 10;
     public static final int BULLET_WIDTH = ResourceManager.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceManager.bulletD.getHeight();
-    private Rectangle rectangle = new Rectangle();
+    public Rectangle rectangle = new Rectangle();
     
     private boolean living = true;
 
@@ -55,22 +54,21 @@ public class Bullet extends GameObject {
         this.y = y;
     }
 
-    public Bullet(Integer x, Integer y, Dir dir, Group group, GameModel gameModel) {
+    public Bullet(Integer x, Integer y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = BULLET_WIDTH;
         rectangle.height = BULLET_HEIGHT;
-        gameModel.add(this);
+        GameModel.getInstance().add(this);
     }
 
     public void print(Graphics graphics) {
         if (!living) {
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
         //Color color = graphics.getColor();
         //graphics.setColor(Color.RED);
@@ -128,13 +126,13 @@ public class Bullet extends GameObject {
             this.die();
             int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explosion.EXPLOSION_WIDTH / 2;
             int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explosion.EXPLOSION_HEIGHT / 2;
-            gameModel.add(new Explosion(eX, eY, gameModel));
+            GameModel.getInstance().add(new Explosion(eX, eY));
             return false;
         }
         return true;
     }
 
-    private void die() {
+    public void die() {
         this.living = false;
     }
 }

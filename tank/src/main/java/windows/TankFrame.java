@@ -28,10 +28,10 @@ import java.awt.event.WindowEvent;
  */
 public class TankFrame extends Frame {
     
-    private GameModel gameModel = new GameModel();
+    private GameModel gameModel = GameModel.getInstance();
     
-    private static final int GAME_WIDTH = 500;
-    private static final int GAME_HEIGHT = 500;
+    private static final int GAME_WIDTH = 1000;
+    private static final int GAME_HEIGHT = 1000;
     private Image offScreenImage = null;
 
     public static int getGameWidth() {

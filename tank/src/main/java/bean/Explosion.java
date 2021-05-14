@@ -33,8 +33,6 @@ public class Explosion extends GameObject {
     public static final int EXPLOSION_WIDTH = ResourceManager.explosionList[0].getWidth();
     public static final int EXPLOSION_HEIGHT = ResourceManager.explosionList[0].getHeight();
 
-    private GameModel gameModel;
-    
     private boolean living = true;
 
     public Integer getX() {
@@ -53,16 +51,15 @@ public class Explosion extends GameObject {
         this.y = y;
     }
 
-    public Explosion(Integer x, Integer y, GameModel gameModel) {
+    public Explosion(Integer x, Integer y) {
         this.x = x;
         this.y = y;
-        this.gameModel = gameModel;
     }
 
     public void print(Graphics graphics) {
         graphics.drawImage(ResourceManager.explosionList[step++], x, y, EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
         if (step >= ResourceManager.explosionList.length) {
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
     }
 

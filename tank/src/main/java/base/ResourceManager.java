@@ -28,7 +28,7 @@ import java.util.List;
 public class ResourceManager {
     
     public static BufferedImage gTankU, gTankD, gTankL, gTankR, bTankU, bTankD, bTankL, bTankR,
-    bulletU, bulletD, bulletL, bulletR;
+    bulletU, bulletD, bulletL, bulletR, squareR;
 
     public static BufferedImage[] explosionList = new BufferedImage[16];
     
@@ -48,6 +48,8 @@ public class ResourceManager {
             bulletD = ImageUtil.rotateImage(bulletU, 180);
             bulletL = ImageUtil.rotateImage(bulletU, 270);
             bulletR = ImageUtil.rotateImage(bulletU, 90);
+
+            squareR = ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/square0.jpg"));
             
             for (int i = 0; i < 16; i++){
                 explosionList[i] = (ImageIO.read(ResourceManager.class.getClassLoader().getResourceAsStream("images/e" + (i+1) + ".gif")));

@@ -40,7 +40,6 @@ public class Tank extends GameObject {
     private Group group = Group.GOOD;
     private boolean moving = false;
     private int numberOfLives = 5;
-    private GameModel gameModel;
     public boolean living = true;
     public static final int TANK_WIDTH = ResourceManager.gTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceManager.gTankD.getHeight();
@@ -53,14 +52,13 @@ public class Tank extends GameObject {
     public Tank() {
     }
 
-    public Tank(Integer x, Integer y, Dir dir, Group group, GameModel gameModel) {
+    public Tank(Integer x, Integer y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.oldX = x;
         this.oldY = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = TANK_WIDTH;
@@ -130,17 +128,9 @@ public class Tank extends GameObject {
         this.numberOfLives = numberOfLives;
     }
 
-    public GameModel getGameModel() {
-        return gameModel;
-    }
-
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
-    }
-
     public void print(Graphics graphics) {
         if (!living) {
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
         printTank(graphics, x, y);
         tankMove();
@@ -166,10 +156,10 @@ public class Tank extends GameObject {
     }
 
     private void tankMove() {
-        if (this.x.equals(this.oldX) | this.y.equals(this.oldY)) {
+        //if (this.x.equals(this.oldX) | this.y.equals(this.oldY)) {
             this.oldX = this.x;
             this.oldY = this.y;
-        }
+        //}
         if (!moving && Group.GOOD == group) return;
         switch (dir) {
             case UP:
@@ -229,22 +219,22 @@ public class Tank extends GameObject {
     }
 
     public boolean collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) {
-        //    相同坦克相撞退回上一步
-            this.x = this.oldX;
-            this.y = this.oldY;
-        }
         if (this.group != tank.getGroup() && this.rectangle.intersects(tank.rectangle)) {
             tank.die();
             this.die();
-            gameModel.add(new Explosion(tank.getX(), tank.getY(), gameModel));
-            gameModel.add(new Explosion(this.x, this.y, gameModel));
+            GameModel.getInstance().add(new Explosion(tank.getX(), tank.getY()));
+            GameModel.getInstance().add(new Explosion(this.x, this.y));
             if (tank.group == Group.GOOD || this.group == Group.GOOD) {
-                gameModel.setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD, gameModel));
+                GameModel.getInstance().setMyTank(new Tank(100, 100, Dir.DOWN, Group.GOOD));
                 numberOfLives --;
             }
-            return false;
+            return false; 
         }
         return true;
+    }
+    public void back() {
+        //相同坦克相撞退回上一步
+        this.x = this.oldX;
+        this.y = this.oldY;
     }
 }

@@ -4,6 +4,7 @@ import base.Dir;
 import base.Group;
 import base.PropertiesManager;
 import bean.Tank;
+import bean.Wall;
 import interfaces.interfaceImpl.ColliderChain;
 
 import java.awt.*;
@@ -28,21 +29,40 @@ import java.util.List;
  *          <br>
  */ 
 public class GameModel {
+    private static final GameModel INSTANCE = new GameModel();
     
-    private Tank myTank = new Tank(100, 100, Dir.DOWN, Group.GOOD, this);
+    private Tank myTank;
+    
+    private Wall wall = new Wall(30, 50);
     
     private List<GameObject> gameObjects = new ArrayList<>();
 
     private ColliderChain colliderChain = new ColliderChain();
     
-    public GameModel() {
+    public static GameModel getInstance(){
+        return INSTANCE;
+    }
+    
+    static {
+        INSTANCE.init();
+    }
+    
+    private void init(){
+        myTank = new Tank(100, 100, Dir.DOWN, Group.GOOD);
         gameObjects.add(myTank);
+        
         PropertiesManager propertiesManager = PropertiesManager.getInstance();
         int initBadTankCount = Integer.parseInt((String) propertiesManager.getProperty("initBadTankCount"));
         for (int i = 0; i < initBadTankCount ; i++) {
-            Tank tank = new Tank(70 * i, 300, Dir.UP, Group.BAD, this);
+            Tank tank = new Tank(100 * i, 300, Dir.UP, Group.BAD);
             gameObjects.add(tank);
         }
+        
+        gameObjects.add(wall);
+    }
+    
+    private GameModel() {
+        
     }
     
     public void add(GameObject gameObject){
